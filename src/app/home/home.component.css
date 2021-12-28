@@ -1,0 +1,60 @@
+.container {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
+}
+
+@media (max-width:800px) {
+  .container {
+    flex-direction: column;
+  }
+
+}
+
+.box {
+  cursor: pointer;
+  height: 300px;
+  width: 300px;
+  margin: 5px auto;
+  border: 1px solid black;
+  clear: both;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.red {
+  background-color: red;
+}
+
+.purple {
+  background-color: purple;
+}
+
+.green {
+  background-color: green;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+.orange {
+  background-color: orange;
+}
+
+.white {
+  background-color: white;
+}
+
+.pink {
+  background-color: pink;
+}
+
+.brown {
+  background-color: brown;
+}

@@ -1,0 +1,12 @@
+<div *ngIf="colors" class="container">
+  <div *ngFor="let c of findedColors">
+    <div (click)="addVote(c.id)" class="box {{c.colorName}}">
+      <app-progress-bar [progressInPrecent]="calculateValue(c.colorVotes!)"></app-progress-bar>
+      <div>{{c.colorVotes}}</div>
+    </div>
+  </div>
+
+</div>
+<div *ngIf="!colors">
+  <p> There is no Colors in the system.</p>
+</div>
