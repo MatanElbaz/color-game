@@ -1,8 +1,7 @@
 <div *ngIf="colors" class="container">
-  <div *ngFor="let c of findedColors">
+  <div *ngFor="let c of webSocketService.colors">
     <div (click)="addVote(c.id)" class="box {{c.colorName}}">
-      <app-progress-bar [progressInPrecent]="calculateValue(c.colorVotes!)"></app-progress-bar>
-      <div>{{c.colorVotes}}</div>
+      <app-progress-bar colorVotes="{{c.colorVotes}}" [progressInPrecent]="calculateValue(c.colorVotes!)"></app-progress-bar>
     </div>
   </div>
 

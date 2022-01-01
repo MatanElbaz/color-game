@@ -8,10 +8,13 @@ import { Component, ElementRef, Input, OnInit } from '@angular/core';
 export class ProgressBarComponent implements OnInit {
 
   private _progressInPrecent?: number;
+  @Input()
+  public colorVotes:any;
 
   constructor(private elementRef: ElementRef) { }
 
   ngOnInit(): void {
+
   }
 
   @Input()

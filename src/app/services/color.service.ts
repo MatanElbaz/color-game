@@ -8,6 +8,8 @@ import { Color } from '../models/color';
 })
 export class ColorService {
 
+  maxVoted: number = 0;
+
   constructor(private httpClient: HttpClient) { }
 
   public getAllColors(): Observable<Color[]> {

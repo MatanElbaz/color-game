@@ -1,7 +1,8 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Color } from '../models/color';
 import { ColorService } from '../services/color.service';
+import { WebSocketService } from '../services/web-socket.service';
 
 @Component({
   selector: 'app-home',
@@ -11,20 +12,27 @@ import { ColorService } from '../services/color.service';
 export class HomeComponent implements OnInit {
 
   colors?: Color[];
-  findedColors?: Color[];
+  findedColors: Color[] = [];
   colorId?: number;
 
-  maxVoted: number = 0;
 
-  constructor(private colorService: ColorService) { }
+  constructor(public webSocketService: WebSocketService, private colorService: ColorService) { }
 
   ngOnInit(): void {
+    this.webSocketService.openWebSocket();
     this.getAllColors()
   }
 
-  getAllColors() {
-    let obsOfColors: Observable<Color[]> = this.colorService.getAllColors();
+  ngAfterViewInit() {
 
+  }
+
+  ngOnDestroy(): void {
+    this.webSocketService.closeWebSocket();
+  }
+
+  getAllColors(): any {
+    let obsOfColors: Observable<Color[]> = this.colorService.getAllColors();
     obsOfColors.subscribe(
       arr => {
         this.colors = arr;
@@ -33,27 +41,33 @@ export class HomeComponent implements OnInit {
           this.checkMaxVote(c.colorVotes!)
           this.findedColors.push(c);
         }
+        this.webSocketService.colors = this.findedColors;
+
       }
     )
   }
   checkMaxVote(colorVotes: number) {
-    if (colorVotes > this.maxVoted) {
-      this.maxVoted = colorVotes;
+    if (colorVotes > this.colorService.maxVoted) {
+      this.colorService.maxVoted = colorVotes;
+      console.log(this.colorService.maxVoted);
+
     }
   }
   calculateValue(votes: number) {
-    return 100 * (votes / this.maxVoted)
+    return 100 * (votes / this.colorService.maxVoted)
   }
 
   addVote(id: any) {
     let obsOfColors: Observable<any> = this.colorService.addColorVote(id);
     obsOfColors.subscribe(color => {
-      this.findedColors?.forEach(element => {
-        if (element.id == id) {
-          element.colorVotes = color.colorVotes;
-          this.checkMaxVote(color.colorVotes);
-        }
-      });
+      this.webSocketService.sendMessage(color, Number(id));
+
+      // this.findedColors?.forEach(element => {
+      //   if (element.id == id) {
+      //     element.colorVotes = color.colorVotes;
+      //     this.checkMaxVote(color.colorVotes);
+      //   }
+      // });
     })
   }
 
